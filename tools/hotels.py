@@ -11,12 +11,23 @@ from fastmcp import FastMCP
 from config import get_api_base_url
 
 
-def register_hotel_tools(mcp: FastMCP):
-    """Register all hotel-related tools with the MCP server."""
-
-    @mcp.tool()
+class HotelTools:
+    """Hotel-related tools using class-based approach with dependency injection."""
+    
+    def __init__(self, mcp: FastMCP):
+        self.mcp = mcp
+        self.base_url = get_api_base_url()
+        # Auto-register all tools when class is instantiated
+        self._register_tools()
+    
+    def _register_tools(self):
+        """Automatically register all tool methods."""
+        self.mcp.tool()(self.search_hotels)
+        self.mcp.tool()(self.get_hotel_by_id)
+        self.mcp.tool()(self.get_hotel_details_with_rooms)
+    
     async def search_hotels(
-        country: Optional[str] = None, city: Optional[str] = None
+        self, country: Optional[str] = None, city: Optional[str] = None
     ) -> dict:
         """
         Searches for available hotel information, filtering by country or city.
@@ -32,7 +43,7 @@ def register_hotel_tools(mcp: FastMCP):
         Returns:
             dict: A dictionary containing the data of the hotels found.
         """
-        base_url = f"{get_api_base_url()}/hotels"
+        base_url = f"{self.base_url}/hotels"
 
         # Build query parameters
         params = {}
@@ -72,8 +83,7 @@ def register_hotel_tools(mcp: FastMCP):
                 "success": False,
             }
 
-    @mcp.tool()
-    async def get_hotel_by_id(hotel_id: str) -> dict:
+    async def get_hotel_by_id(self, hotel_id: str) -> dict:
         """
         Retrieves detailed information for a specific hotel by its ID from the HyperFunnel API.
 
@@ -103,7 +113,7 @@ def register_hotel_tools(mcp: FastMCP):
 
         Note: Requires the service to be running on localhost:8000
         """
-        url = f"{get_api_base_url()}/hotels/{hotel_id}"
+        url = f"{self.base_url}/hotels/{hotel_id}"
 
         try:
             async with httpx.AsyncClient() as client:
@@ -138,8 +148,7 @@ def register_hotel_tools(mcp: FastMCP):
                 "url": url,
             }
 
-    @mcp.tool()
-    async def get_hotel_details_with_rooms(hotel_id: str) -> dict:
+    async def get_hotel_details_with_rooms(self, hotel_id: str) -> dict:
         """
         Retrieves complete details for a specific hotel, including information for all of its rooms.
 
@@ -152,7 +161,7 @@ def register_hotel_tools(mcp: FastMCP):
         Returns:
             dict: A dictionary containing the hotel's details and a list of its rooms.
         """
-        url = f"{get_api_base_url()}/hotels/{hotel_id}/with-rooms"
+        url = f"{self.base_url}/hotels/{hotel_id}/with-rooms"
 
         try:
             async with httpx.AsyncClient() as client:
