@@ -8,6 +8,7 @@ from the modular tools package structure.
 from fastmcp import FastMCP
 from tools.hotels import register_hotel_tools
 from tools.destinations import register_destination_tools
+from tools.rooms import register_rooms_tools
 
 # Initialize the MCP server
 mcp = FastMCP("HyperFunnel Destinations API Client")
@@ -15,6 +16,7 @@ mcp = FastMCP("HyperFunnel Destinations API Client")
 # Register all tool modules
 register_hotel_tools(mcp)
 register_destination_tools(mcp)
+register_rooms_tools(mcp)
 
 if __name__ == "__main__":
     mcp.run()
