@@ -5,17 +5,17 @@ from config import get_api_base_url
 
 class RoomTools:
     """Room-related tools using class-based approach with dependency injection."""
-    
+
     def __init__(self, mcp: FastMCP):
         self.mcp = mcp
         self.base_url = get_api_base_url()
         # Auto-register all tools when class is instantiated
         self._register_tools()
-    
+
     def _register_tools(self):
         """Automatically register all tool methods."""
         self.mcp.tool()(self.get_rooms_by_hotel_id)
-    
+
     async def get_rooms_by_hotel_id(self, hotel_id: str) -> dict:
         """
         Retrieves all rooms available for a specific hotel from the HyperFunnel API.

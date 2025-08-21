@@ -11,17 +11,17 @@ from config import get_api_base_url
 
 class DestinationTools:
     """Destination-related tools using class-based approach with dependency injection."""
-    
+
     def __init__(self, mcp: FastMCP):
         self.mcp = mcp
         self.base_url = get_api_base_url()
         # Auto-register all tools when class is instantiated
         self._register_tools()
-    
+
     def _register_tools(self):
         """Automatically register all tool methods."""
         self.mcp.tool()(self.get_available_destinations)
-    
+
     async def get_available_destinations(self) -> dict:
         """
         Retrieves information on available travel destinations from the HyperFunnel service.
