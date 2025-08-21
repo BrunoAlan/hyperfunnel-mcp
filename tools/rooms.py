@@ -3,11 +3,20 @@ from fastmcp import FastMCP
 from config import get_api_base_url
 
 
-def register_rooms_tools(mcp: FastMCP):
-    """Register all room-related tools with the MCP server."""
-
-    @mcp.tool()
-    async def get_rooms_by_hotel_id(hotel_id: str) -> dict:
+class RoomTools:
+    """Room-related tools using class-based approach with dependency injection."""
+    
+    def __init__(self, mcp: FastMCP):
+        self.mcp = mcp
+        self.base_url = get_api_base_url()
+        # Auto-register all tools when class is instantiated
+        self._register_tools()
+    
+    def _register_tools(self):
+        """Automatically register all tool methods."""
+        self.mcp.tool()(self.get_rooms_by_hotel_id)
+    
+    async def get_rooms_by_hotel_id(self, hotel_id: str) -> dict:
         """
         Retrieves all rooms available for a specific hotel from the HyperFunnel API.
 
@@ -46,7 +55,7 @@ def register_rooms_tools(mcp: FastMCP):
 
         Note: Requires the service to be running on localhost:8000
         """
-        url = f"{get_api_base_url()}/rooms/by-hotel/{hotel_id}"
+        url = f"{self.base_url}/rooms/by-hotel/{hotel_id}"
 
         try:
             async with httpx.AsyncClient() as client:
