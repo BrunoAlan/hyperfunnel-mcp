@@ -9,11 +9,20 @@ from fastmcp import FastMCP
 from config import get_api_base_url
 
 
-def register_destination_tools(mcp: FastMCP):
-    """Register all destination-related tools with the MCP server."""
-
-    @mcp.tool()
-    async def get_available_destinations() -> dict:
+class DestinationTools:
+    """Destination-related tools using class-based approach with dependency injection."""
+    
+    def __init__(self, mcp: FastMCP):
+        self.mcp = mcp
+        self.base_url = get_api_base_url()
+        # Auto-register all tools when class is instantiated
+        self._register_tools()
+    
+    def _register_tools(self):
+        """Automatically register all tool methods."""
+        self.mcp.tool()(self.get_available_destinations)
+    
+    async def get_available_destinations(self) -> dict:
         """
         Retrieves information on available travel destinations from the HyperFunnel service.
         This tool is used to answer questions about which destinations can be booked,
@@ -23,7 +32,7 @@ def register_destination_tools(mcp: FastMCP):
         Returns:
              dict: The complete API response, including destination data.
         """
-        url = f"{get_api_base_url()}/destinations"
+        url = f"{self.base_url}/destinations"
 
         try:
             async with httpx.AsyncClient() as client:
