@@ -13,32 +13,15 @@ def register_destination_tools(mcp: FastMCP):
     """Register all destination-related tools with the MCP server."""
 
     @mcp.tool()
-    async def destination_request() -> dict:
+    async def get_available_destinations() -> dict:
         """
-        Retrieves destination information from the HyperFunnel API.
-
-        This tool connects to the destinations service running on localhost:8000
-        to fetch data about available destinations, route configurations,
-        or any information related to the /destinations endpoint.
-
-        Typical use cases:
-        - Query available destinations in the system
-        - Check the status of the destinations service
-        - Get routing configurations
-        - Monitor connectivity with the destinations service
-
-        The tool automatically handles connection errors and response parsing,
-        returning both JSON responses and plain text depending on what the API returns.
-
+        Retrieves information on available travel destinations from the HyperFunnel service.
+        This tool is used to answer questions about which destinations can be booked,
+        their specific features, or to check if a specific destination exists in the system.
+        Args:
+            None. This tool does not require any arguments.
         Returns:
-            dict: Complete API response that includes:
-                - status_code (int): HTTP status code (200, 404, 500, etc.)
-                - headers (dict): Response headers from the server
-                - content (dict|str): Response content (parsed JSON or text)
-                - success (bool): True if the response was successful (2xx)
-                - error (str, optional): Error message if any problem occurred
-
-        Note: Requires the service to be running on localhost:8000
+             dict: The complete API response, including destination data.
         """
         url = f"{get_api_base_url()}/destinations"
 
