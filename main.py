@@ -1,5 +1,5 @@
 def main():
-    print("Hello from hyperfunnel-mcp!")
+    print("HyperFunnel MCP running...")
 
 
 if __name__ == "__main__":
