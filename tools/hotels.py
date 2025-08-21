@@ -6,6 +6,7 @@ getting hotel lists, individual hotel details, and hotel room information.
 """
 
 import httpx
+from typing import Optional
 from fastmcp import FastMCP
 from config import get_api_base_url
 
@@ -14,7 +15,9 @@ def register_hotel_tools(mcp: FastMCP):
     """Register all hotel-related tools with the MCP server."""
 
     @mcp.tool()
-    async def get_hotels(country: str = None, city: str = None) -> dict:
+    async def get_hotels(
+        country: Optional[str] = None, city: Optional[str] = None
+    ) -> dict:
         """
         Retrieves hotel information from the HyperFunnel API.
 
