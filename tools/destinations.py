@@ -6,11 +6,12 @@ This module contains all tools related to destination operations.
 
 import httpx
 from fastmcp import FastMCP
+from config import get_api_base_url
 
 
 def register_destination_tools(mcp: FastMCP):
     """Register all destination-related tools with the MCP server."""
-    
+
     @mcp.tool()
     async def destination_request() -> dict:
         """
@@ -39,7 +40,7 @@ def register_destination_tools(mcp: FastMCP):
 
         Note: Requires the service to be running on localhost:8000
         """
-        url = "http://localhost:8000/destinations"
+        url = f"{get_api_base_url()}/destinations"
 
         try:
             async with httpx.AsyncClient() as client:

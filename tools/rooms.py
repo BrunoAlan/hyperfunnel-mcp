@@ -1,5 +1,6 @@
 import httpx
 from fastmcp import FastMCP
+from config import get_api_base_url
 
 
 def register_rooms_tools(mcp: FastMCP):
@@ -45,7 +46,7 @@ def register_rooms_tools(mcp: FastMCP):
 
         Note: Requires the service to be running on localhost:8000
         """
-        url = f"http://127.0.0.1:8000/rooms/by-hotel/{hotel_id}"
+        url = f"{get_api_base_url()}/rooms/by-hotel/{hotel_id}"
 
         try:
             async with httpx.AsyncClient() as client:
