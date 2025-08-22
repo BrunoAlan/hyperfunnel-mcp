@@ -100,7 +100,6 @@ class BookingTools:
         check_in_date: str,
         check_out_date: str,
         guests: int,
-        price: Optional[float] = None,
         status: Optional[str] = None,
     ) -> dict:
         """
@@ -114,7 +113,6 @@ class BookingTools:
             check_in_date (str): The check-in date in YYYY-MM-DD format.
             check_out_date (str): The check-out date in YYYY-MM-DD format.
             guests (int): The number of guests for the booking.
-            price (float, optional): The total price for the booking.
             status (str, optional): The booking status (e.g., 'PENDING', 'CONFIRMED').
 
         Returns:
