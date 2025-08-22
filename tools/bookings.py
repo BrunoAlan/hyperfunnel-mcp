@@ -129,9 +129,6 @@ class BookingTools:
             "guests": guests,
         }
 
-        # Add optional parameters only if provided
-        if price is not None:
-            request_body["price"] = price
         if status is not None:
             request_body["status"] = status
 
