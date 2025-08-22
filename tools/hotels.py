@@ -13,19 +13,19 @@ from config import get_api_base_url
 
 class HotelTools:
     """Hotel-related tools using class-based approach with dependency injection."""
-    
+
     def __init__(self, mcp: FastMCP):
         self.mcp = mcp
         self.base_url = get_api_base_url()
         # Auto-register all tools when class is instantiated
         self._register_tools()
-    
+
     def _register_tools(self):
         """Automatically register all tool methods."""
         self.mcp.tool()(self.search_hotels)
         self.mcp.tool()(self.get_hotel_by_id)
         self.mcp.tool()(self.get_hotel_details_with_rooms)
-    
+
     async def search_hotels(
         self, country: Optional[str] = None, city: Optional[str] = None
     ) -> dict:
@@ -85,33 +85,15 @@ class HotelTools:
 
     async def get_hotel_by_id(self, hotel_id: str) -> dict:
         """
-        Retrieves detailed information for a specific hotel by its ID from the HyperFunnel API.
+        Retrieves a specific hotel's details using its unique identifier.
 
-        This tool connects to the hotels service running on localhost:8000
-        to fetch complete details about a specific hotel using its unique identifier.
-
-        Typical use cases:
-        - Get complete details of a specific hotel
-        - Retrieve hotel information for booking or display purposes
-        - Access detailed hotel data including amenities, location, and pricing
-        - Verify hotel existence and availability
-
-        The tool automatically handles connection errors and response parsing,
-        returning both JSON responses and plain text depending on what the API returns.
+        This tool is best used when the user is asking for information about a single, known hotel.
 
         Args:
-            hotel_id (str): The unique UUID identifier of the hotel
+            hotel_id (str): The unique identifier of the hotel.
 
         Returns:
-            dict: Complete API response that includes:
-                - status_code (int): HTTP status code (200, 404, 500, etc.)
-                - headers (dict): Response headers from the server
-                - content (dict|str): Response content (complete Hotel object or error)
-                - success (bool): True if the response was successful (2xx)
-                - error (str, optional): Error message if any problem occurred
-                - url (str): The final URL that was requested
-
-        Note: Requires the service to be running on localhost:8000
+            dict: A dictionary with the complete hotel's details.
         """
         url = f"{self.base_url}/hotels/{hotel_id}"
 
