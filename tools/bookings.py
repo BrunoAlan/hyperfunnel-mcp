@@ -104,29 +104,21 @@ class BookingTools:
         status: Optional[str] = None,
     ) -> dict:
         """
-        Creates a new booking reservation in the system.
+        Creates a new booking reservation for a room.
 
-        This is a KEY ENDPOINT that handles the complete booking creation process.
-        It automatically verifies availability, calculates pricing if not provided,
-        reduces room availability, and manages transactions with rollback capability.
+        This tool is used to finalize a booking after the user has confirmed all the details.
 
         Args:
             hotel_id (str): The unique identifier of the hotel.
             room_id (str): The unique identifier of the room to book.
-            check_in_date (str): Check-in date in YYYY-MM-DD format.
-            check_out_date (str): Check-out date in YYYY-MM-DD format.
-            guests (int): Number of guests (1-10).
-            price (float, optional): Total price. If not provided, will be calculated automatically.
-            status (str, optional): Booking status. Defaults to PENDING if not specified.
+            check_in_date (str): The check-in date in YYYY-MM-DD format.
+            check_out_date (str): The check-out date in YYYY-MM-DD format.
+            guests (int): The number of guests for the booking.
+            price (float, optional): The total price for the booking.
+            status (str, optional): The booking status (e.g., 'PENDING', 'CONFIRMED').
 
         Returns:
-            dict: Complete API response that includes:
-                - status_code (int): HTTP status code (200, 400, 404, 409, 500)
-                - headers (dict): Response headers from the server
-                - content (dict|str): Created Booking object or error message
-                - success (bool): True if the response was successful (2xx)
-                - error (str, optional): Error message if any problem occurred
-                - url (str): The final URL that was requested
+            dict: A dictionary confirming the successful creation of the booking.
         """
         url = f"{self.base_url}/bookings"
 
