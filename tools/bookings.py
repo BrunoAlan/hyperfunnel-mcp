@@ -113,7 +113,7 @@ class BookingTools:
             check_in_date (str): The check-in date in YYYY-MM-DD format.
             check_out_date (str): The check-out date in YYYY-MM-DD format.
             guests (int): The number of guests for the booking.
-            status (str, optional): The booking status (e.g., 'PENDING', 'CONFIRMED').
+            status (str, optional): The booking status. Valid values are: 'pending', 'confirmed', 'cancelled', 'completed' (all lowercase).
 
         Returns:
             dict: A dictionary confirming the successful creation of the booking.
