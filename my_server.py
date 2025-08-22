@@ -10,6 +10,7 @@ from tools.hotels import HotelTools
 from tools.destinations import DestinationTools
 from tools.rooms import RoomTools
 from tools.availability import AvailabilityTools
+from tools.bookings import BookingTools
 
 # Initialize the MCP server
 mcp = FastMCP("HyperFunnel Destinations API Client")
@@ -19,6 +20,7 @@ HotelTools(mcp)
 DestinationTools(mcp)
 RoomTools(mcp)
 AvailabilityTools(mcp)
+BookingTools(mcp)
 
 if __name__ == "__main__":
     mcp.run()
