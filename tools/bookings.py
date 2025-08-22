@@ -33,34 +33,19 @@ class BookingTools:
         guests: int,
     ) -> dict:
         """
-        Gets a booking quotation without creating an actual reservation.
+        Calculates the total price for a potential room reservation.
 
-        This is a KEY ENDPOINT that provides complete pricing information for a potential booking.
-        It calculates total costs, validates availability, and provides detailed price breakdowns
-        without committing to a reservation.
+        This tool is used to get a price quote and confirm availability before making a final booking.
+        It takes a room ID, dates, and number of guests to provide a price breakdown.
 
         Args:
             room_id (str): The unique identifier of the room to quote.
-            check_in_date (str): Check-in date in YYYY-MM-DD format.
-            check_out_date (str): Check-out date in YYYY-MM-DD format.
-            guests (int): Number of guests (1-10).
+            check_in_date (str): The check-in date in YYYY-MM-DD format.
+            check_out_date (str): The check-out date in YYYY-MM-DD format.
+            guests (int): The number of guests for the booking.
 
         Returns:
-            dict: Complete API response that includes:
-                - status_code (int): HTTP status code (200, 400, 404, 409, 500)
-                - headers (dict): Response headers from the server
-                - content (dict|str): Complete quote object with:
-                  * room_id, room_name
-                  * check_in_date, check_out_date, guests
-                  * nights: integer
-                  * total_price: float
-                  * average_price_per_night: float
-                  * price_breakdown: array with daily prices
-                  * currency: string
-                  * availability_confirmed: boolean
-                - success (bool): True if the response was successful (2xx)
-                - error (str, optional): Error message if any problem occurred
-                - url (str): The final URL that was requested
+            dict: A dictionary with the total price and details for the booking quote.
         """
         url = f"{self.base_url}/bookings/quote"
 
