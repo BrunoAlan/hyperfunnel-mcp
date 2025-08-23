@@ -36,7 +36,7 @@ HyperFunnel MCP Server acts as a bridge between MCP clients (like Claude Desktop
 ## Prerequisites
 
 - Python 3.11 or higher
-- [uv](https://docs.astral.sh/uv/) package manager
+- [uv](https://docs.astral.sh/uv/) package manager (recommended)
 - Access to a running HyperFunnel API server (default: `http://127.0.0.1:8000`)
 
 ## Installation
@@ -69,13 +69,80 @@ HYPERFUNNEL_API_BASE_URL=http://127.0.0.1:8000
 
 ### Running the Server
 
-Start the MCP server using uv:
+The MCP server supports multiple transport types and can be run with either `uv` or `python`.
 
+#### Using uv (Recommended)
+
+**STDIO Transport (Default - for MCP clients):**
 ```bash
 uv run my_server.py
+# or explicitly:
+uv run my_server.py --transport stdio
 ```
 
-The server will start and listen for MCP client connections.
+**HTTP Transport:**
+```bash
+uv run my_server.py --transport http
+# or short form:
+uv run my_server.py -t http
+```
+
+**SSE Transport:**
+```bash
+uv run my_server.py --transport sse
+# or short form:
+uv run my_server.py -t sse
+```
+
+**Custom host/port:**
+```bash
+uv run my_server.py --transport http --host 0.0.0.0 --port 8080
+```
+
+#### Using Python Directly
+
+**STDIO Transport (Default - for MCP clients):**
+```bash
+python my_server.py
+# or explicitly:
+python my_server.py --transport stdio
+```
+
+**HTTP Transport:**
+```bash
+python my_server.py --transport http
+# or short form:
+python my_server.py -t http
+```
+
+**SSE Transport:**
+```bash
+python my_server.py --transport sse
+# or short form:
+python my_server.py -t sse
+```
+
+**Custom host/port:**
+```bash
+python my_server.py --transport http --host 0.0.0.0 --port 8080
+```
+
+#### Transport Types Explained
+
+- **STDIO**: Standard input/output transport (default) - best for MCP client integration
+- **HTTP**: HTTP server transport - useful for testing and development
+- **SSE**: Server-Sent Events transport - alternative to HTTP for real-time communication
+
+#### Help and Options
+
+View all available options:
+```bash
+# With uv
+uv run my_server.py --help
+
+# With python
+python my_server.py --help
+```
 
 ### Integration with Claude Desktop
 
@@ -84,12 +151,26 @@ To use this server with Claude Desktop, add the following configuration to your 
 **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
 
+#### Using uv (Recommended):
 ```json
 {
   "mcpServers": {
     "hyperfunnel": {
       "command": "uv",
       "args": ["run", "my_server.py"],
+      "cwd": "/path/to/hyperfunnel-mcp"
+    }
+  }
+}
+```
+
+#### Using Python directly:
+```json
+{
+  "mcpServers": {
+    "hyperfunnel": {
+      "command": "python",
+      "args": ["my_server.py"],
       "cwd": "/path/to/hyperfunnel-mcp"
     }
   }
@@ -118,7 +199,7 @@ This MCP server requires a running HyperFunnel API service. The API should provi
 hyperfunnel-mcp/
 ├── config.py              # Configuration management
 ├── main.py                # Simple main entry point
-├── my_server.py           # MCP server implementation
+├── my_server.py           # MCP server implementation with transport selection
 ├── pyproject.toml         # Project dependencies and metadata
 ├── tools/                 # MCP tool implementations
 │   ├── __init__.py
@@ -140,6 +221,7 @@ The server uses a class-based approach with dependency injection:
 2. **Tool Classes**: Each domain (hotels, rooms, bookings, etc.) has its own tool class
 3. **Auto-registration**: Tools are automatically registered when classes are instantiated
 4. **HTTP Client**: Uses `httpx` for async HTTP communication with the API
+5. **Transport Selection**: Command-line argument parsing for flexible transport configuration
 
 ### Adding New Tools
 
@@ -182,3 +264,31 @@ All tools include comprehensive error handling:
 - **fastmcp**: MCP server framework (>=2.11.3)
 - **httpx**: Async HTTP client (>=0.27.0)
 - **python-dotenv**: Environment variable management (>=1.0.0)
+
+## Troubleshooting
+
+### Common Issues
+
+**Port already in use:**
+```bash
+# Use a different port
+uv run my_server.py --transport http --port 8002
+```
+
+**Permission denied:**
+```bash
+# Make sure you have execute permissions
+chmod +x my_server.py
+```
+
+**Transport not supported:**
+- Ensure you're using the correct transport type for your use case
+- STDIO is recommended for MCP client integration
+- HTTP/SSE are useful for development and testing
+
+### Getting Help
+
+Run the help command to see all available options:
+```bash
+uv run my_server.py --help
+```
